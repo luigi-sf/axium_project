@@ -45,17 +45,6 @@ A documentação da API está disponível via Swagger em:
 
 http://localhost:3000/api-docs
 
-Estrutura do Projeto
-src/
-  ├── config/           # Configurações (JWT, Prisma, Swagger)
-  ├── controllers/      # Controladores da aplicação
-  ├── dtos/             # Data Transfer Objects
-  ├── middlewares/      # Middlewares (auth, error handler)
-  ├── routes/           # Rotas da API
-  ├── services/         # Regras de negócio
-  ├── prisma/           # Schema e configurações do Prisma
-  └── server.ts         # Arquivo principal da aplicação
-
 Tecnologias Utilizadas
 
 Node.js
