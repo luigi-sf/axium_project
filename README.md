@@ -1,56 +1,73 @@
-# Gestão de Fornecedores e Cotações
+Gestão de Fornecedores e Cotações – AXIUM
 
-Sistema de gerenciamento de fornecedores e cotações desenvolvido com Node.js, Express, Sequelize e Swagger.
+Sistema de gerenciamento de fornecedores, produtos e cotações desenvolvido com Node.js, Express, TypeScript, Prisma ORM e Swagger.
 
-## Requisitos
+Requisitos
 
-- Node.js (versão 14 ou superior)
-- PostgreSQL
-- npm ou yarn
+Node.js (versão 18 ou superior)
 
-## Configuração
+PostgreSQL
 
-1. Clone o repositório
-2. Instale as dependências:
-```bash
+npm ou yarn
+
+Configuração
+1️⃣ Clone o repositório
+git clone https://github.com/luigi-sf/project_axium.git
+cd project_axium
+
+2️⃣ Instale as dependências
 npm install
-```
 
-3. Configure as variáveis de ambiente:
-- Copie o arquivo `.env.example` para `.env`
-- Ajuste as variáveis conforme necessário
+3️⃣ Configure as variáveis de ambiente
 
-4. Configure o banco de dados:
-- Crie um banco de dados PostgreSQL
-- Ajuste as credenciais no arquivo `.env`
+Crie um arquivo .env
 
-## Executando o projeto
+Configure a variável:
 
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/axium"
+JWT_SECRET="sua_chave_secreta"
+
+4️⃣ Configure o banco de dados
+npx prisma migrate dev
+npx prisma generate
+
+Executando o projeto
 Para desenvolvimento:
-```bash
 npm run dev
-```
 
 Para produção:
-```bash
+npm run build
 npm start
-```
 
-## Documentação da API
+Documentação da API
 
-A documentação da API está disponível através do Swagger UI em:
-```
+A documentação da API está disponível via Swagger em:
+
 http://localhost:3000/api-docs
-```
 
-## Estrutura do Projeto
-
-```
+Estrutura do Projeto
 src/
-  ├── config/         # Configurações do projeto
-  ├── controllers/    # Controladores da aplicação
-  ├── models/        # Modelos do Sequelize
-  ├── routes/        # Rotas da API
-  ├── services/      # Lógica de negócios
-  └── index.js       # Arquivo principal da aplicação
-``` 
+  ├── config/           # Configurações (JWT, Prisma, Swagger)
+  ├── controllers/      # Controladores da aplicação
+  ├── dtos/             # Data Transfer Objects
+  ├── middlewares/      # Middlewares (auth, error handler)
+  ├── routes/           # Rotas da API
+  ├── services/         # Regras de negócio
+  ├── prisma/           # Schema e configurações do Prisma
+  └── server.ts         # Arquivo principal da aplicação
+
+Tecnologias Utilizadas
+
+Node.js
+
+Express
+
+TypeScript
+
+Prisma ORM
+
+PostgreSQL
+
+Swagger (OpenAPI)
+
+JWT
