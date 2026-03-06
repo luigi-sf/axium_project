@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client-js"
+   output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ErrorLogs {
+  id           String                   @id @default(uuid()) @db.Uuid
+  errorMessage String
+  errorStack   String?
+  errorCode    String?                  @db.VarChar(255)
+  url          String
+  method       String                   @db.VarChar(255)
+  requestBody  Json?
+  queryParams  Json?
+  userId       String?                  @db.Uuid
+  userEmail    String?                  @db.VarChar(255)
+  ipAddress    String?
+  userAgent    String?
+  severity     enum_ErrorLogs_severity? @default(medium)
+  resolved     Boolean?                 @default(false)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+}
+
+model HttpLogs {
+  id           String             @id @default(uuid()) @db.Uuid
+  requestId    String             @db.Uuid
+  type         enum_HttpLogs_type
+  timestamp    DateTime           @default(now())
+  method       String             @db.VarChar(255)
+  url          String
+  headers      Json?
+  body         Json?
+  queryParams  Json?
+  statusCode   Int?
+  responseTime Int?
+  userId       String?            @db.Uuid
+  userEmail    String?            @db.VarChar(255)
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+// ----------------------------
+// USERS
+// ----------------------------
+model Users {
+  id       String           @id @default(uuid()) @db.Uuid
+  name     String           @db.VarChar(255)
+  email    String           @unique @db.VarChar(255)
+  password String           @db.VarChar(255)
+  role     enum_Users_role  @default(USER)
+  active   Boolean          @default(true)
+
+  // 🔥 Supplier profile (1:1)
+  supplierProfile Suppliers?
+
+  // Audit relations
+  createdSuppliers Suppliers[] @relation("CreatedSuppliers")
+  updatedSuppliers Suppliers[] @relation("UpdatedSuppliers")
+
+  products   Product[]
+  quotations Quotation[]
+
+  passwordChangedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+// ----------------------------
+// SUPPLIERS
+// ----------------------------
+model Suppliers {
+  id                    String  @id @default(uuid()) @db.Uuid
+  companyName           String  @db.VarChar(255)
+  tradingName           String? @db.VarChar(255)
+  cnpj                  String  @unique @db.VarChar(18)
+  stateRegistration     String? @db.VarChar(255)
+  municipalRegistration String? @db.VarChar(255)
+  address               String  @db.VarChar(255)
+  addressNumber         String  @db.VarChar(255)
+  addressComplement     String? @db.VarChar(255)
+  neighborhood          String  @db.VarChar(255)
+  city                  String  @db.VarChar(255)
+  state                 String  @db.VarChar(2)
+  zipCode               String  @db.VarChar(9)
+  phone                 String  @db.VarChar(255)
+  email                 String  @unique @db.VarChar(255)
+  contactName           String  @db.VarChar(255)
+  website               String? @db.VarChar(255)
+  businessActivity      String  @db.VarChar(255)
+  taxRegime             enum_Suppliers_taxRegime?
+  bankName              String? @db.VarChar(255)
+  bankBranch            String? @db.VarChar(255)
+  bankAccount           String? @db.VarChar(255)
+  bankPixKey            String? @db.VarChar(255)
+  notes                 String?
+  active                Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 🔥 RELAÇÃO COM USER (LOGIN)
+  userId String @unique @db.Uuid
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Audit
+  createdBy String? @db.Uuid
+  creator   Users?  @relation("CreatedSuppliers", fields: [createdBy], references: [id])
+
+  updatedBy String? @db.Uuid
+  updater   Users?  @relation("UpdatedSuppliers", fields: [updatedBy], references: [id])
+
+  quotations Quotation[]
+}
+
+// ----------------------------
+// PRODUCTS
+// ----------------------------
+model Product {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String @db.Uuid
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  quotationItems QuotationItem[]
+}
+
+// ----------------------------
+// QUOTATION
+// ----------------------------
+model Quotation {
+  id        String   @id @default(uuid()) @db.Uuid
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @db.Uuid
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  supplierId String    @db.Uuid
+  supplier   Suppliers @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  items QuotationItem[]
+}
+
+// ----------------------------
+// QUOTATION ITEM
+// ----------------------------
+model QuotationItem {
+  id       String @id @default(uuid()) @db.Uuid
+  quantity Int
+  price    Float?
+
+  quotationId String    @db.Uuid
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ----------------------------
+// ENUMS
+// ----------------------------
+enum enum_ErrorLogs_severity {
+  low
+  medium
+  high
+  critical
+}
+
+enum enum_HttpLogs_type {
+  request
+  response
+}
+
+enum enum_Suppliers_taxRegime {
+  Simples_Nacional @map("Simples Nacional")
+  Lucro_Presumido  @map("Lucro Presumido")
+  Lucro_Real       @map("Lucro Real")
+  MEI
+}
+
+enum enum_Users_role {
+  ADMIN
+  USER
+  SUPPLIER
+}
