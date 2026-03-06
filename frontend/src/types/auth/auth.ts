@@ -9,6 +9,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string
   user: User | null
+  role?: 'USER'|'SUPPLIER'|'ADMIN'
 }
 
 export type Credentials = {

@@ -19,7 +19,7 @@ export const Dashboard = () => {
   useEffect(() => {
     async function loadSuppliers() {
       try {
-        const response = await api.get("/api/v1/suppliers");
+        const response = await api.get("/suppliers");
 
         console.log("SUPPLIERS RESPONSE:", response.data);
          console.log("🔥 RESPONSE COMPLETA:", response);

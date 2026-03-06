@@ -9,30 +9,30 @@ import type {
 
 export const productService = {
   async list(params?: Record<string, unknown>): Promise<Product[]> {
-    const response = await api.get('/api/v1/products', { params })
-    return response.data
+    const response = await api.get('/products', { params })
+    return response.data.data
   },
 
   async getById(id: string): Promise<Product> {
-    const response = await api.get(`/api/v1/products/${id}`)
-    return response.data
+    const response = await api.get(`/products/${id}`)
+    return response.data.data
   },
 
   async create(data: CreateProductDTO): Promise<Product> {
-    const response = await api.post('/api/v1/products', data)
-    return response.data
+    const response = await api.post('/products', data)
+    return response.data.data
   },
 
   async update(
     id: string,
     data: UpdateProductDTO
   ): Promise<Product> {
-    const response = await api.put(`/api/v1/products/${id}`, data)
-    return response.data
+    const response = await api.put(`/products/edit/${id}`, data)
+    return response.data.data
   },
 
   async remove(id: string): Promise<void> {
-    await api.delete(`/api/v1/products/${id}`)
+    await api.delete(`/products/${id}`)
   },
 
   async uploadImage(
@@ -43,7 +43,7 @@ export const productService = {
     formData.append('image', file)
 
     const response = await api.post(
-      `/api/v1/products/${productId}/images`,
+      `/products/${productId}/images`,
       formData
     )
 
@@ -54,7 +54,7 @@ export const productService = {
     productId: string
   ): Promise<ProductImage[]> {
     const response = await api.get(
-      `/api/v1/products/${productId}/images`
+      `/products/${productId}/images`
     )
     return response.data
   },
@@ -64,7 +64,7 @@ export const productService = {
     imageId: string
   ): Promise<void> {
     await api.delete(
-      `/api/v1/products/${productId}/images/${imageId}`
+      `/products/${productId}/images/${imageId}`
     )
   }
 }

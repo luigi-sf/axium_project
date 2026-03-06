@@ -5,26 +5,34 @@ import type {
   UpdateQuotationDTO
 } from '../types/quotation/quotation'
 
-export const cotacaoService = {
-  async list(): Promise<Quotation[]> {
-    const response = await api.get('/cotacoes')
-    return response.data
-  },
+export const quotationService = {
 
+  // 🔹 Criar cotação
   async create(data: CreateQuotationDTO): Promise<Quotation> {
-    const response = await api.post('/cotacoes', data)
-    return response.data
+    const res = await api.post("/quotations", data)
+    return res.data
   },
 
-  async update(
-    id: string,
-    data: UpdateQuotationDTO
-  ): Promise<Quotation> {
-    const response = await api.put(`/cotacoes/${id}`, data)
-    return response.data
+  // 🔹 Listar cotações
+  async list(): Promise<Quotation[]> {
+    const res = await api.get("/quotations")
+    return res.data
   },
 
-  async deleted(id: string): Promise<void> {
-    await api.delete(`/cotacoes/${id}`)
+  // 🔹 Buscar por ID
+  async getById(id: string): Promise<Quotation> {
+    const res = await api.get(`/quotations/${id}`)
+    return res.data
+  },
+
+  // 🔹 Atualizar cotação
+  async update(id: string, data: UpdateQuotationDTO): Promise<Quotation> {
+    const res = await api.put(`/quotations/${id}`, data)
+    return res.data
+  },
+
+  // 🔹 Deletar cotação
+  async remove(id: string): Promise<void> {
+    await api.delete(`/quotations/${id}`)
   }
 }

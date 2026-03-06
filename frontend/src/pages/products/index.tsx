@@ -39,33 +39,18 @@ export default function ProductsPage() {
         </thead>
 
         <tbody>
-          {products.map(product => (
-            <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>R$ {product.price}</td>
-              <td>{product.active ? 'Ativo' : 'Inativo'}</td>
-              <td>
-                <button
-                  onClick={() =>
-                    navigate(`/products/${product.id}/edit`)
-                  }
-                >
-                  Editar
-                </button>
-
-                <button
-                  onClick={() => {
-                    if (confirm('Tem certeza que deseja excluir?')) {
-                      deleteProduct(product.id)
-                    }
-                  }}
-                >
-                  Excluir
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {products.map(product => (
+    <tr key={product.id}>
+      <td>{product.name}</td>
+      <td>R$ {product.price.toFixed(2)}</td>
+      <td>{product.active ? 'Ativo' : 'Inativo'}</td>
+      <td>
+        <button onClick={() => navigate(`/products/edit/${product.id}`)}>Editar</button>
+        <button onClick={() => deleteProduct(product.id)}>Excluir</button>
+      </td>
+    </tr>
+  ))}
+</tbody>
       </table>
     </div>
   )

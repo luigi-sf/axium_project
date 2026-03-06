@@ -6,6 +6,7 @@ export interface QuotationItem {
 
 export interface Quotation {
   id: string
+  title: string
   supplierId: string
   supplierName: string
   items: QuotationItem[]
@@ -15,14 +16,20 @@ export interface Quotation {
 }
 
 export interface CreateQuotationDTO {
-  supplierName?:string
-  title:string
+  supplierId: string
+  title: string
   items: {
     productId: string
     quotedPrice: number
   }[]
 }
 
-export type UpdateQuotationDTO = CreateQuotationDTO & {
+export interface UpdateQuotationDTO {
+  supplierId?: string
+  title?: string
+  items?: {
+    productId: string
+    quotedPrice: number
+  }[]
   status?: 'aberta' | 'fechada' | 'cancelada'
 }

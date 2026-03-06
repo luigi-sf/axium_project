@@ -45,6 +45,7 @@ export function QuotationProvider({ children }: { children: React.ReactNode }) {
         loading,
         error,
         loadQuotations,
+        getQuotationById,
         createQuotation,
         updateQuotation,
         deleteQuotation
